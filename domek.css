@@ -20,19 +20,57 @@ canvas{
     gap: 10px;
 }
 
-.tButton {
-    padding: 12px 24px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
+.button {
+    display: inline-block;
     cursor: pointer;
+    text-align: center;
+    transition: background 0.3s, color 0.3s;
+    padding: 12px 24px;
+    background-color: white;
+    color: #333;
+    border-color: black;
+    border: 2px solid white;
+    border-radius: 5px;
     font-family: Arial, sans-serif;
     font-size: 16px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    transition: background-color 0.3s;
+    font-weight: bolder;
+  }
+
+  #toggle:checked + .button,
+  #toggle1:checked + .button,
+  #toggle2:checked + .button {
+    background-color: #333;
+    color: white;
+  }
+
+  .zoom-controls {
+    position: fixed;
+    bottom: 30px;
+    right: 50px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #333;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    color: #333;
 }
 
-.tButton:hover {
-    background-color: #555;
+.zoom-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    color: #333;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bolder;
 }

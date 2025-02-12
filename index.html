@@ -12,9 +12,18 @@
 <body>
     <canvas id="renderCanvas"></canvas>
     <div class="button-container">
-        <button id="toggleButton" class="tButton">Ukryj parter</button>
-        <button id="toggleButton1" class="tButton">Ukryj strop</button>
-        <button id="toggleButton2" class="tButton">Ukryj dach</button>
+        <input type="checkbox" id="toggle" hidden>
+        <label for="toggle" class="button" id="toggleButton2">Dach</label>
+        
+        <input type="checkbox" id="toggle1" hidden>
+        <label for="toggle1" class="button" id="toggleButton1">Strop</label>
+        
+        <input type="checkbox" id="toggle2" hidden>
+        <label for="toggle2" class="button" id="toggleButton">Parter</label>
+    </div>
+    <div class="zoom-controls">
+        <button class="zoom-button" id="zoomIn">+</button>
+        <button class="zoom-button" id="zoomOut">−</button>
     </div>
     <script>
 
@@ -259,10 +268,6 @@
             loadedMeshes.forEach(mesh => {
                 mesh.isVisible = isVisible;
             });
-
-            // Zmień tekst przycisku
-            toggleButton.textContent = isVisible ? 'Ukryj parter' : 
-                'Pokaż parter';
             }
         });
 
@@ -277,10 +282,6 @@
             loadedMeshes1.forEach(mesh1 => {
                 mesh1.isVisible = isVisible1;
             });
-
-            // Zmień tekst przycisku
-            toggleButton1.textContent = isVisible1 ? 'Ukryj strop' : 
-                'Pokaż strop';
             }
         });
 
@@ -295,10 +296,25 @@
             loadedMeshes2.forEach(mesh2 => {
                 mesh2.isVisible = isVisible2;
             });
+            }
+        });
 
-            // Zmień tekst przycisku
-            toggleButton2.textContent = isVisible2 ? 'Ukryj dach' : 
-                'Pokaż dach';
+        // Obsługa zoomu
+        const zoomSpeed = 0.2;
+
+        document.getElementById('zoomIn').addEventListener('click', () => {
+            if (scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
+                scene.activeCamera.radius -= scene.activeCamera.radius *
+                    zoomSpeed;
+                
+            }
+        });
+
+        document.getElementById('zoomOut').addEventListener('click', () => {
+            if (scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
+                scene.activeCamera.radius += scene.activeCamera.radius *
+                    zoomSpeed;
+                
             }
         });
 
