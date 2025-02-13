@@ -10,29 +10,28 @@ canvas{
 	display: block;
 }
 
-.button-container {
+.button-container{
     position: fixed;
-    right: 20px;
-    top: 20px;
+    right: 2%;
+    top: 5%;
     z-index: 1000;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    gap: clamp(10px, 0.8vw, 20px);
 }
 
-.button {
+.button{
     display: inline-block;
     cursor: pointer;
     text-align: center;
-    transition: background 0.3s, color 0.3s;
-    padding: 12px 24px;
+    padding: clamp(10px, 0.8vw, 20px) clamp(20px, 1.6vw, 40px);
     background-color: white;
     color: #333;
     border-color: black;
-    border: 2px solid white;
-    border-radius: 5px;
+    border: clamp(5px, 0.2vw, 16px) solid white;
+    border-radius: clamp(10px, 0.5vw, 20px);
     font-family: Arial, sans-serif;
-    font-size: 16px;
+    font-size: clamp(18px, 1vw, 26px);
     font-weight: bolder;
   }
 
@@ -43,34 +42,39 @@ canvas{
     color: white;
   }
 
-  .zoom-controls {
+  .zoom-controls{
     position: fixed;
-    bottom: 30px;
-    right: 50px;
+    bottom: 5%;
+    right: 3%;
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: clamp(10px, 0.6vw, 20px);
     background: #333;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    color: #333;
+    padding: clamp(10px, 0.6vw, 20px);
+    border-radius: clamp(14px, 0.8vw, 24px);
+    border: clamp(5px, 0.2vw, 16px) solid white;
 }
 
-.zoom-button {
-    width: 40px;
-    height: 40px;
+.zoom-button{
+    width: clamp(25px, 3.5vw, 50px);
+    height: auto;
+    aspect-ratio: 1/1;
     border-radius: 50%;
     background: white;
     color: #333;
-    font-size: 24px;
+    font-size: clamp(18px, 1.5vw, 26px);
     line-height: 1;
     cursor: pointer;
-    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bolder;
+}
+
+.zoom-separator{
+  width: 100%;
+  height: clamp(5px, 0.2vw, 16px);
+  background-color: white;
+  margin: clamp(5px, 0.2vw, 16px) auto;
 }
