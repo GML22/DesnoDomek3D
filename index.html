@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Domek - wizualizacja 3D</title>
     <link href="./imgs/GML_IC.jpg" rel="icon">
     <link type="text/css" rel="stylesheet" href="./src/domek.css">
@@ -10,7 +10,7 @@
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 </head>
 <body>
-    <canvas id="renderCanvas"></canvas>
+    <canvas id="renderCanvas" tabindex="0"></canvas>
     <div class="button-container">
         <input type="checkbox" id="toggle" hidden>
         <label for="toggle" class="button" id="toggleButton2">Dach</label>
@@ -26,6 +26,7 @@
         <div class="zoom-separator"></div>
         <button class="zoom-button" id="zoomOut">−</button>
     </div>
+    <button id="walkButton">Rozpocznij wirtualny spacer</button>
     <script src="./src/domek.js"></script>
 </body>
 </html>

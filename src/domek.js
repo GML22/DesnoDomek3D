@@ -218,6 +218,94 @@ const createScene = function (){
         });
     };
 
+    // Dodajemy nową kamerę UniversalCamera
+    const walkCamera = new BABYLON.UniversalCamera("walkCamera",
+        new BABYLON.Vector3(160, 18, 7), scene);
+    walkCamera.attachControl(canvas, true, false);
+    walkCamera.speed = 0.5;
+    
+    // Ustawienia czułości kamery na urządzeniu mobilnym (Zmniejsz wartość,
+    // aby zwiększyć czułość)
+    walkCamera.inputs.attached.touch.touchAngularSensibility = 10000;
+    
+    // Sprawdzamy, czy urządzenie jest mobilne
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        walkCamera.speed = 1.0;
+        
+    } else {
+        walkCamera.speed = 0.5;
+    }
+
+    // Dodajemy kontrolki poruszania się
+    walkCamera.keysUp.push(87);
+    walkCamera.keysDown.push(83);
+    walkCamera.keysLeft.push(65);
+    walkCamera.keysRight.push(68);
+
+    const lockCameraYPosition = (camera, fixedY) => {
+        camera.onAfterCheckInputsObservable.add(() => {
+            camera.position.y = fixedY;
+        });
+    };
+
+    document.getElementById('walkButton').addEventListener('click', function() {
+        var zoomControls = document.querySelector('.zoom-controls');
+        if (zoomControls) {
+            zoomControls.style.opacity = '0';
+            setTimeout(function() {
+                zoomControls.style.display = 'none';
+            }, 300); 
+        }
+    });
+
+    walkButton.addEventListener('click', () => {
+
+        if (walkButton.textContent === 'Rozpocznij wirtualny spacer') {
+            walkButton.textContent = 'Wróć do ogólnej kamery';
+    
+            if (scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
+                scene.activeCamera.detachControl(canvas);
+                scene.activeCamera = walkCamera;
+                walkCamera.attachControl(canvas, true);
+                isRotating = false;
+    
+                // Resetowanie pozycji i rotacji walkCamera
+                walkCamera.position = new BABYLON.Vector3(160, 18, 7);
+                walkCamera.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
+    
+                // Obliczenie bounding box dla wszystkich meshów
+                let minY = Infinity;
+                let maxY = -Infinity;
+                transformNode.getChildMeshes().forEach(mesh => {
+                    const boundingInfo = mesh.getBoundingInfo();
+                    minY = Math.min(minY,
+                        boundingInfo.boundingBox.minimumWorld.y);
+                    maxY = Math.max(maxY,
+                        boundingInfo.boundingBox.maximumWorld.y);
+                });
+    
+                // Blokujemy pozycję y kamery
+                lockCameraYPosition(walkCamera, walkCamera.position.y);
+    
+                // Przeniesienie fokusu na element canvas
+                canvas.focus();
+            }
+        } else {
+            walkButton.textContent = 'Rozpocznij wirtualny spacer';
+    
+            if (scene.activeCamera instanceof BABYLON.UniversalCamera) {
+                scene.activeCamera.detachControl(canvas);
+                scene.activeCamera = camera;
+                camera.attachControl(canvas, true);
+    
+                // Przeniesienie fokusu na element canvas
+                canvas.focus();
+            }
+        }
+    });
+
     // Inicjujemy rotacje
     initialize();
 
@@ -236,7 +324,6 @@ engine.runRenderLoop(() => scene.render());
 // Nasłuchuj zmian rozmiaru okna i aktualizuj kamerę oraz silnik
 window.addEventListener("resize", () => {
     engine.resize();  // Dopasowanie silnika Babylon do nowego rozmiaru
-    updateCameraZoom(); // Aktualizacja zoomu kamery
 });
 
 // Inicjalizacja przycisku dla Parteru
@@ -251,6 +338,10 @@ toggleButton.addEventListener('click', () => {
             mesh.isVisible = isVisible;
         });
     }
+
+    // Przeniesienie fokusu na element canvas
+    canvas.focus();
+    
 });
 
 // Inicjalizacja przycisku dla stropu
@@ -265,6 +356,9 @@ toggleButton1.addEventListener('click', () => {
             mesh1.isVisible = isVisible1;
         });
     }
+
+    // Przeniesienie fokusu na element canvas
+    canvas.focus();
 });
 
 // Inicjalizacja przycisku dla dachu
@@ -279,6 +373,10 @@ toggleButton2.addEventListener('click', () => {
             mesh2.isVisible = isVisible2;
         });
     }
+
+    // Przeniesienie fokusu na element canvas
+    canvas.focus();
+    
 });
 
 // Obsługa zoomu IN
