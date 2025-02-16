@@ -8,6 +8,7 @@ let loadedMeshes = [];
 let loadedMeshes1 = [];
 let loadedMeshes2 = [];
 let transformNode;
+let skybox; // Dodajemy zmienną dla skybox
 
 // Główna funkcja tworząca scenę
 const createScene = function (){
@@ -29,7 +30,8 @@ const createScene = function (){
 
     // Pozwól na używanie prawego przycisku myszy
     camera.attachControl(canvas, true);
-
+    
+    // Ustawiamy kamerę na scenie
     function updateCameraZoom() {
         if (window.innerWidth > window.innerHeight){
 
@@ -148,8 +150,8 @@ const createScene = function (){
                 
                 // Ustalamy pozycję obiektu na płaszczyźnie
                 mesh1.position.y = 25.5;
-                mesh1.position.x = -61.5;
-                mesh1.position.z = 129.75;
+                mesh1.position.x = -72;
+                mesh1.position.z = 127;
 
                 // Materiał - biały na zewnątrz
                 let material1 = new BABYLON.StandardMaterial(
@@ -172,6 +174,8 @@ const createScene = function (){
 
                 // Czarny kolor krawędzi
                 mesh1.edgesColor = new BABYLON.Color4(0, 0, 0, 1);
+
+                // Zwracamy obietnicę
                 resolve();
             });
         });
@@ -230,7 +234,8 @@ const createScene = function (){
     
     // Sprawdzamy, czy urządzenie jest mobilne
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
+    
+    // Ustawiamy prędkość kamery na urządzeniu mobilnym
     if (isMobile) {
         walkCamera.speed = 1.0;
         
@@ -244,37 +249,50 @@ const createScene = function (){
     walkCamera.keysLeft.push(65);
     walkCamera.keysRight.push(68);
 
+    // Ustawienie tła 360° za pomocą PhotoDome
+    //new BABYLON.PhotoDome(
+    //    "skyDome",
+    //    "imgs/Desno.jpg", {
+    //        resolution: 32,
+    //        size: 2000 // Rozmiar sfery (im większy, tym bardziej panoramiczne tło)
+    //    },
+    //    scene
+    //);
+
+    // Funkcja blokująca pozycję y kamery
     const lockCameraYPosition = (camera, fixedY) => {
         camera.onAfterCheckInputsObservable.add(() => {
             camera.position.y = fixedY;
         });
     };
 
-    document.getElementById('walkButton').addEventListener('click', function() {
-        var zoomControls = document.querySelector('.zoom-controls');
-        if (zoomControls) {
-            zoomControls.style.opacity = '0';
-            setTimeout(function() {
-                zoomControls.style.display = 'none';
-            }, 300); 
-        }
-    });
-
+    // Dodajemy przycisk do rozpoczęcia wirtualnego spaceru
     walkButton.addEventListener('click', () => {
 
+        // Pobieramy zoomControls
+        var zoomControls = document.querySelector('.zoom-controls');
+
+        // Sprawdzamy, czy przycisk ma tekst 'Rozpocznij wirtualny spacer'
         if (walkButton.textContent === 'Rozpocznij wirtualny spacer') {
             walkButton.textContent = 'Wróć do ogólnej kamery';
-    
+
+            // Wyłączamy zoomControls
+            if (zoomControls) {
+                zoomControls.style.opacity = '0';
+                zoomControls.style.display = 'none';
+            }
+            
+            // Sprawdzamy, czy kamera jest typu ArcRotateCamera
             if (scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
                 scene.activeCamera.detachControl(canvas);
                 scene.activeCamera = walkCamera;
                 walkCamera.attachControl(canvas, true);
                 isRotating = false;
-    
+
                 // Resetowanie pozycji i rotacji walkCamera
                 walkCamera.position = new BABYLON.Vector3(160, 18, 7);
                 walkCamera.rotation = new BABYLON.Vector3(0, -Math.PI / 2, 0);
-    
+
                 // Obliczenie bounding box dla wszystkich meshów
                 let minY = Infinity;
                 let maxY = -Infinity;
@@ -285,23 +303,38 @@ const createScene = function (){
                     maxY = Math.max(maxY,
                         boundingInfo.boundingBox.maximumWorld.y);
                 });
-    
+
                 // Blokujemy pozycję y kamery
                 lockCameraYPosition(walkCamera, walkCamera.position.y);
-    
+
+                // Włączamy skybox
+                skybox.setEnabled(true);
+
                 // Przeniesienie fokusu na element canvas
                 canvas.focus();
             }
-        } else {
+        } else{
+            
+            // Zmiana tekstu przycisku
             walkButton.textContent = 'Rozpocznij wirtualny spacer';
-    
-            if (scene.activeCamera instanceof BABYLON.UniversalCamera) {
+            
+            // Sprawdzamy, czy kamera jest typu UniversalCamera
+            if (scene.activeCamera instanceof BABYLON.UniversalCamera){
                 scene.activeCamera.detachControl(canvas);
                 scene.activeCamera = camera;
                 camera.attachControl(canvas, true);
-    
+
+                // Wyłączamy skybox
+                skybox.setEnabled(false);
+
                 // Przeniesienie fokusu na element canvas
                 canvas.focus();
+            }
+
+            // Włączamy zoomControls
+            if (zoomControls) {
+                zoomControls.style.opacity = '100';
+                zoomControls.style.display = 'block';
             }
         }
     });
@@ -315,7 +348,6 @@ const createScene = function (){
     // Zwracamy gotową scenę
     return scene;
 };
-
 
 // Renderujemy scenę
 const scene = createScene();
@@ -386,7 +418,6 @@ document.getElementById('zoomIn').addEventListener('click', () => {
     if (scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
         scene.activeCamera.radius -= scene.activeCamera.radius *
             zoomSpeed;
-        
     }
 });
 
@@ -395,6 +426,5 @@ document.getElementById('zoomOut').addEventListener('click', () => {
     if (scene.activeCamera instanceof BABYLON.ArcRotateCamera) {
         scene.activeCamera.radius += scene.activeCamera.radius *
             zoomSpeed;
-        
     }
 });
