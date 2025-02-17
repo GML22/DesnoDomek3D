@@ -10,85 +10,63 @@ canvas{
 	display: block;
 }
 
+.tab-container{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: #333;
+  z-index: 1000;
+}
+
+.tab{
+  padding: clamp(8px, 0.4vw, 16px) clamp(12px, 1vw, 20px);
+  cursor: pointer;
+  color: white;
+  font-size: clamp(18px, 1.2vw, 24px);
+  font-weight: bolder;
+  text-align: center;
+  background-color: #333;
+  border: clamp(4px, 0.2vw, 8px) solid white;
+}
+
+.tab.active{
+  background-color: white;
+  color: #333;
+}
+
 .button-container{
-    position: fixed;
-    right: 2%;
-    top: 5%;
-    z-index: 1000;
-    display: flex;
-    flex-direction: row;
-    gap: clamp(10px, 0.8vw, 20px);
+  position: fixed;
+  top: 10%;
+  right: 5%;
+  display: flex;
+  gap: clamp(6px, 0.5vw, 12px);
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: auto;
+  z-index: 1000;
 }
 
 .button{
-    display: inline-block;
-    cursor: pointer;
-    text-align: center;
-    padding: clamp(10px, 0.8vw, 20px) clamp(20px, 1.6vw, 40px);
-    background-color: white;
-    color: #333;
-    border: clamp(5px, 0.2vw, 16px) solid #333;
-    border-radius: clamp(10px, 0.5vw, 20px);
-    font-family: Arial, sans-serif;
-    font-size: clamp(18px, 1vw, 26px);
-    font-weight: bolder;
-  }
-
-  #toggle:checked + .button,
-  #toggle1:checked + .button,
-  #toggle2:checked + .button {
-    background-color: #333;
-    color: white;
-  }
-
-  .zoom-controls{
-    position: fixed;
-    bottom: 15%;
-    right: 5%;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: clamp(10px, 0.6vw, 20px);
-    background: #333;
-    padding: clamp(10px, 0.6vw, 20px);
-    border-radius: clamp(14px, 0.8vw, 24px);
-    border: clamp(5px, 0.2vw, 16px) solid white;
-}
-
-.zoom-button{
-    width: clamp(25px, 3.5vw, 50px);
-    height: auto;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    background: white;
-    color: #333;
-    font-size: clamp(18px, 1.5vw, 26px);
-    line-height: 1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bolder;
-}
-
-.zoom-separator{
-  width: 100%;
-  height: clamp(5px, 0.2vw, 16px);
-  background-color: white;
-  margin: clamp(5px, 0.2vw, 16px) auto;
-}
-
-#walkButton{
-  position: absolute;
-  bottom: 5%;
-  left: 3%;
-  padding: clamp(10px, 0.8vw, 20px) clamp(20px, 1.6vw, 40px);
-  background: white;
-  color: #333;
-  border: clamp(7px, 0.3vw, 15px) solid #333;
-  border-radius: clamp(12px, 0.5vw, 22px);
+  display: inline-block;
   cursor: pointer;
-  font-size: clamp(18px, 1vw, 26px);
-  z-index: 100;
+  text-align: center;
+  padding: clamp(8px, 0.4vw, 16px) clamp(12px, 1vw, 20px);
+  background-color: white;
+  color: #333;
+  border: clamp(5px, 0.2vw, 16px) solid #333;
+  border-radius: clamp(10px, 0.5vw, 20px);
+  font-family: Arial, sans-serif;
+  font-size: clamp(18px, 1.2vw, 24px);
   font-weight: bolder;
+}
+
+#toggle1:checked + .button,
+#toggle2:checked + .button,
+#toggle3:checked + .button {
+  background-color: #333;
+  color: white;
+  border: clamp(5px, 0.2vw, 16px) solid white;
 }

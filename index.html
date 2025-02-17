@@ -10,23 +10,21 @@
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 </head>
 <body>
+    <div class="tab-container">
+        <div id="tabStandard" class="tab active">Widok z góry</div>
+        <div id="tabWalk" class="tab">Wirtualny spacer</div>
+    </div>
     <canvas id="renderCanvas" tabindex="0"></canvas>
     <div class="button-container">
-        <input type="checkbox" id="toggle" hidden>
-        <label for="toggle" class="button" id="toggleButton2">Dach</label>
-        
         <input type="checkbox" id="toggle1" hidden>
-        <label for="toggle1" class="button" id="toggleButton1">Strop</label>
+        <label for="toggle1" class="button" id="toggleButton2">Dach</label>
         
         <input type="checkbox" id="toggle2" hidden>
-        <label for="toggle2" class="button" id="toggleButton">Parter</label>
+        <label for="toggle2" class="button" id="toggleButton1">Strop</label>
+        
+        <input type="checkbox" id="toggle3" hidden>
+        <label for="toggle3" class="button" id="toggleButton">Parter</label>
     </div>
-    <div class="zoom-controls">
-        <button class="zoom-button" id="zoomIn">+</button>
-        <div class="zoom-separator"></div>
-        <button class="zoom-button" id="zoomOut">−</button>
-    </div>
-    <button id="walkButton">Rozpocznij wirtualny spacer</button>
     <script src="./src/domek.js"></script>
 </body>
 </html>
