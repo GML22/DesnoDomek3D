@@ -1,43 +1,42 @@
 // Definiujemy zmienne globalne grupujące wczytane meshe
-let transformNode;
-let walkTransformNode;
+let trans_node;
+let walk_trans_node;
 
 // Definiujemy zmienną globalną, która będzie przechowywać informację o tym,
 // czy rotacja jest włączona
-let isRotating = true;
+let is_rotating = true;
 
-// Definiujemy zmienne globalne, które będą przechowywaźć wczytane meshe
-// dla kamery standardowej
-let loadedMeshes = [];
-let loadedMeshes1 = [];
-let loadedMeshes2 = [];
+// Definiujemy słownik, który będzie przechowywaźć wczytane meshe dla kamery
+// standardowej
+let lm_dict = {};
 
-// Definiujemy zmienne globalne, które będą przechowywaźć wczytane meshe
-// dla kamery walk
-let walkLoadedMeshes = [];
-let walkLoadedMeshes1 = [];
-let walkLoadedMeshes2 = [];
+// Definiujemy słownik, który będzie przechowywaźć wczytane meshe dla kamery
+// walk
+let wlm_dict = {};
+
+// Tablica z identyfikatorami przycisków
+const toggle_butts = ['toggle_butt1', 'toggle_butt2', 'toggle_butt3'];
 
 // Definiujemy zmienną globalną, która będzie przechowywać informację o tym,
 // która zakładka jest aktywna
-let activeTab = 'standard';
+let active_tab = 'standard';
 
 // Definiujemy zmienną globalną, która będzie przechowywać informację o tym,
 // czy użytkownik zatrzymał rotację
-let userStoppedRotation = false;
+let stop_rot = false;
 
 // Definiujemy tablice przechowujące stany przycisków
 let buttons_states = [false, false, false];
 let walk_buttons_states = [false, false, false];
 
 // Definiujemy canvas
-const canvas = document.getElementById("renderCanvas");
+const canvas = document.getElementById("render_canvas");
 
 // Tworzymy silnik
 const engine = new BABYLON.Engine(canvas, true);
 
 // Główna funkcja tworząca scenę
-const createScene = function (){
+const create_scene = function (){
 
     // Definiujemy obiekt sceny
     const scene = new BABYLON.Scene(engine);
@@ -60,39 +59,39 @@ const createScene = function (){
     camera.attachControl(canvas, true);
 
      // Dodajemy nową kamerę UniversalCamera
-     const walkCamera = new BABYLON.UniversalCamera("walkCamera",
+     const walk_camera = new BABYLON.UniversalCamera("walkCamera",
         new BABYLON.Vector3(200, -13, 150), scene);
     
     // Ustawienia czułości kamery na urządzeniu mobilnym (Zmniejsz wartość,
     // aby zwiększyć czułość)
-    walkCamera.inputs.attached.touch.touchAngularSensibility = 10000;
+    walk_camera.inputs.attached.touch.touchAngularSensibility = 10000;
     
     // Sprawdzamy, czy urządzenie jest mobilne
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const is_mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     
     // Ustawiamy prędkość kamery na urządzeniu mobilnym
-    if (isMobile){
+    if (is_mobile){
 
         // Ustawiamy prędkość kamery na urządzeniu mobilnym
-        walkCamera.speed = 1.0;
+        walk_camera.speed = 1.0;
         
     } else{
         
         // Ustawiamy prędkość kamery na urządzeniu stacjonarnym
-        walkCamera.speed = 0.5;
+        walk_camera.speed = 0.5;
     }
 
-    // Ustawienie rotacji kamery walkCamera o 180 stopni wokół osi Y
-    walkCamera.rotation.y = -Math.PI / 1.6;
+    // Ustawienie rotacji kamery walk_camera o 180 stopni wokół osi Y
+    walk_camera.rotation.y = -Math.PI / 1.6;
 
-    // Ustawienie rotacji kamery walkCamera, aby patrzyła bardziej w górę
-    walkCamera.rotation.x = -Math.PI / 20;
+    // Ustawienie rotacji kamery walk_camera, aby patrzyła bardziej w górę
+    walk_camera.rotation.x = -Math.PI / 20;
 
     // Dodajemy kontrolki poruszania się
-    walkCamera.keysUp.push(87); // W
-    walkCamera.keysDown.push(83); // S
-    walkCamera.keysLeft.push(65); // A
-    walkCamera.keysRight.push(68); // D
+    walk_camera.keysUp.push(87); // W
+    walk_camera.keysDown.push(83); // S
+    walk_camera.keysLeft.push(65); // A
+    walk_camera.keysRight.push(68); // D
 
     // Ustawienie tła 360° za pomocą PhotoDome
     const photodome = new BABYLON.PhotoDome("skyDome", "imgs/Desno.jpg",
@@ -102,7 +101,7 @@ const createScene = function (){
     photodome.setEnabled(false);
     
     // Ustawiamy kamerę na scenie
-    function updateCameraZoom(){
+    function update_camera_zoom(){
 
         // Sprawdzamy, czy okno jest szersze niż wyższe
         if (window.innerWidth > window.innerHeight){
@@ -118,28 +117,28 @@ const createScene = function (){
     };
 
     // Funkcja uruchamiająca rotację
-    const startAutoRotation = () => {
+    const start_auto_rotation = () => {
 
         // Zapisujemy początkowe wartości kątów kamery
         const act_camera = scene.activeCamera;
 
         // Zapisujemy początkowe wartości kątów kamery
-        const initCS = {alpha: act_camera.alpha, beta: act_camera.beta,
+        const init_cs = {alpha: act_camera.alpha, beta: act_camera.beta,
             radius: act_camera.radius};
 
         // Obserwator zmian kamery
         const observer = act_camera.onViewMatrixChangedObservable.add(() => {
 
             // Sprawdzamy, czy kąty kamery się zmieniły
-            if (Math.abs(act_camera.alpha - initCS.alpha) > 0.001 ||
-                Math.abs(act_camera.beta - initCS.beta) > 0.001 ||
-                Math.abs(act_camera.radius - initCS.radius) > 0.001){
+            if (Math.abs(act_camera.alpha - init_cs.alpha) > 0.001 ||
+                Math.abs(act_camera.beta - init_cs.beta) > 0.001 ||
+                Math.abs(act_camera.radius - init_cs.radius) > 0.001){
                 
                 // Zatrzymujemy rotację
-                isRotating = false;
+                is_rotating = false;
 
                 // Ustawiamy, że użytkownik zatrzymał rotację
-                userStoppedRotation = true;
+                stop_rot = true;
 
                 /// Usuwamy obserwatora
                 act_camera.onViewMatrixChangedObservable.remove(observer);
@@ -150,24 +149,25 @@ const createScene = function (){
         scene.registerBeforeRender(() => {
 
             // Sprawdzamy, czy rotacja jest włączona
-            if (isRotating && transformNode){
+            if (is_rotating && trans_node){
 
-                // Obracamy węzeł transformNode
-                transformNode.rotate(BABYLON.Axis.Y,
+                // Obracamy węzeł trans_node
+                trans_node.rotate(BABYLON.Axis.Y,
                     0.01 * scene.getAnimationRatio(), BABYLON.Space.WORLD);
             }
         });
     };
 
     // Funkcja wczytująca plik STL parteru
-    const loadFirstModel = (camera_type, pos_y) => {
+    const load_stl_model = (stl_name, camera_type, pos_y, pos_x, pos_z,
+        emis_col, edge_col, calc_ord) => {
 
         // Zwracamy obietnicę
         return new Promise((resolve) => {
             
             // Wczytujemy plik STL
-            BABYLON.SceneLoader.ImportMesh("", "models/", "Domek - Parter.stl",
-                scene, function (meshes){
+            BABYLON.SceneLoader.ImportMesh("", "models/", stl_name, scene,
+                function (meshes){
                 
                 // Definiujemy mesh
                 let mesh = meshes[0];
@@ -177,24 +177,25 @@ const createScene = function (){
                 if (camera_type === 'walk'){
 
                     // Przypisujemy do zmiennej walkLoadedMeshes
-                    walkLoadedMeshes = meshes;
+                    wlm_dict[`meshes${calc_ord}`] = meshes;
+
                 }else{
 
                     // Przypisujemy do zmiennej loadedMeshes
-                    loadedMeshes = meshes;
+                    lm_dict[`meshes${calc_ord}`] = meshes;
                 }
 
                 // Ustalamy pozycję obiektu na płaszczyźnie
-                mesh.position.y = pos_y - 20;
-                mesh.position.x = -90;
-                mesh.position.z = -90;
+                mesh.position.y = pos_y;
+                mesh.position.x = pos_x;
+                mesh.position.z = pos_z;
 
                 // Materiał - biały na zewnątrz
-                let material = new BABYLON.StandardMaterial(
-                    "whiteMaterial", scene);
+                let material = new BABYLON.StandardMaterial("whiteMaterial",
+                    scene);
                 
                 // Ustawiamy kolor na pełną biel
-                material.emissiveColor = new BABYLON.Color3(1, 1, 1);
+                material.emissiveColor = emis_col;
                 
                 // Wyłączamy oświetlenie
                 material.disableLighting = true; 
@@ -209,7 +210,7 @@ const createScene = function (){
                 mesh.edgesWidth = 50;
 
                 // Czarny kolor krawędzi
-                mesh.edgesColor = new BABYLON.Color4(0, 0, 0, 1);
+                mesh.edgesColor = edge_col;
 
                 // Ustawiamy widoczność na false
                 mesh.isVisible = false;
@@ -220,131 +221,8 @@ const createScene = function (){
         });
     };
 
-    // Funkcja wczytująca plik STL stropu
-    const loadSecondModel = (camera_type, pos_y) => {
-
-        // Zwracamy obietnicę
-        return new Promise((resolve) => {
-            
-            // Wczytujemy plik STL
-            BABYLON.SceneLoader.ImportMesh("", "models/", "Domek - Strop.stl",
-                scene, function (meshes1){
-                
-                // Definiujemy mesh
-                let mesh1 = meshes1[0];
-                
-                // Wywołujemy odpowiedni rodzaj zmiennej w zależnosci od
-                // kamery
-                if (camera_type === 'walk'){
-
-                    // Przypisujemy do zmiennej walkLoadedMeshes1
-                    walkLoadedMeshes1 = meshes1;
-                }else{
-
-                    // Przypisujemy do zmiennej loadedMeshes1
-                    loadedMeshes1 = meshes1;
-                }
-                
-                // Ustalamy pozycję obiektu na płaszczyźnie
-                mesh1.position.y = pos_y - 20;
-                mesh1.position.x = -72;
-                mesh1.position.z = 127;
-
-                // Materiał - biały na zewnątrz
-                let material1 = new BABYLON.StandardMaterial("whiteMaterial",
-                    scene);
-                
-                // Ustawiamy kolor na pełną biel
-                material1.emissiveColor = new BABYLON.Color3(1, 1, 1);
-                
-                // Wyłączamy oświetlenie
-                material1.disableLighting = true; 
-                
-                // Ustawiamy finalny materiał
-                mesh1.material = material1;
-
-                //Podkreślenie krawędzi
-                mesh1.enableEdgesRendering();
-
-                // Grubość linii krawędzi
-                mesh1.edgesWidth = 50;
-
-                // Czarny kolor krawędzi
-                mesh1.edgesColor = new BABYLON.Color4(0, 0, 0, 1);
-
-                // Ustawiamy widoczność na false
-                mesh1.isVisible = false;
-
-                // Zwracamy obietnicę
-                resolve();
-            });
-        });
-    };
-
-    // Funkcja wczytująca plik STL dachu
-    const loadThirdModel = (camera_type, pos_y) => {
-
-        // Zwracamy obietnicę
-        return new Promise((resolve) => {
-            
-            // Wczytujemy plik STL
-            BABYLON.SceneLoader.ImportMesh("", "models/", "Domek - Dach.stl",
-                scene, function (meshes2){
-                
-                // Definiujemy mesh
-                let mesh2 = meshes2[0];
-                
-                // Wywołujemy odpowiedni rodzaj zmiennej w zależnosci od
-                // kamery
-                if (camera_type === 'walk'){
-
-                    // Przypisujemy do zmiennej walkLoadedMeshes2
-                    walkLoadedMeshes2 = meshes2;
-
-                }else{
-
-                    // Przypisujemy do zmiennej loadedMeshes2
-                    loadedMeshes2 = meshes2;
-                }
-
-                // Ustalamy pozycję obiektu na płaszczyźnie
-                mesh2.position.y = pos_y - 20;
-                mesh2.position.x = -306;
-                mesh2.position.z = -86.5;
-
-                // Materiał - biały na zewnątrz
-                let material2 = new BABYLON.StandardMaterial("whiteMaterial",
-                    scene);
-                
-                // Ustawiamy kolor na pełną biel
-                material2.emissiveColor = new BABYLON.Color3(0, 0, 0);
-                
-                // Wyłączamy oświetlenie
-                material2.disableLighting = true; 
-                
-                // Ustawiamy finalny materiał
-                mesh2.material = material2;
-
-                //Podkreślenie krawędzi
-                mesh2.enableEdgesRendering();
-
-                // Grubość linii krawędzi
-                mesh2.edgesWidth = 50;
-
-                // Czarny kolor krawędzi
-                mesh2.edgesColor = new BABYLON.Color4(1, 1, 1, 1);
-
-                // Ustawiamy widoczność na false
-                mesh2.isVisible = false;
-                
-                // Zwracamy obietnicę
-                resolve();
-            });
-        });
-    };
-
     // Funkcja blokująca pozycję y kamery
-    const lockCameraYPosition = (camera, fixedY) => {
+    const lock_cam_ypos = (camera, fixedY) => {
 
         // Dodajemy nasłuchiwanie na kamerę
         camera.onAfterCheckInputsObservable.add(() => {
@@ -355,7 +233,7 @@ const createScene = function (){
     };
 
     // Funkcja przełączająca zakładki
-    const switchTab = async (tabName) => {
+    const switch_tab = async (tabName) => {
 
         // Zmieniamy klasy zakładek
         document.querySelectorAll('.tab').forEach(tab => {
@@ -382,27 +260,27 @@ const createScene = function (){
             photodome.setEnabled(false);
 
             // Zmieniamy nazwę aktywnej zakładki
-            activeTab = 'standard';
+            active_tab = tabName;
 
             // Włącz rotację, jeśli nie została zatrzymana przez użytkownika
-            if (!userStoppedRotation){
+            if (!stop_rot){
 
                 // Włącz rotację
-                isRotating = true;
+                is_rotating = true;
             }
 
-            // Wyłącz modele walkCamera
-            if (walkTransformNode){
+            // Wyłącz modele walk_camera
+            if (walk_trans_node){
 
-                // Wyłączamy modele walkCamera
-                walkTransformNode.setEnabled(false);
+                // Wyłączamy modele walk_camera
+                walk_trans_node.setEnabled(false);
             }
 
             // Włącz modele standardowe
-            if (transformNode){
+            if (trans_node){
 
                 // Włączamy modele standardowe
-                transformNode.setEnabled(true);
+                trans_node.setEnabled(true);
             }
 
             // Zmień stan checkboxów toggle1, toggle2, toggle3 w zależności od
@@ -430,41 +308,41 @@ const createScene = function (){
         } else if (tabName === 'walk'){
 
             // Wyłączamy rotację
-            isRotating = false;
+            is_rotating = false;
 
             // Wyłączamy modele standardowe
-            if (transformNode){
+            if (trans_node){
 
                 // Wyłączamy modele standardowe
-                transformNode.setEnabled(false);
+                trans_node.setEnabled(false);
             }
 
-            // Włączamy modele walkCamera
-            if (walkTransformNode){
+            // Włączamy modele walk_camera
+            if (walk_trans_node){
 
-                // Włączamy modele walkCamera
-                walkTransformNode.setEnabled(true);
+                // Włączamy modele walk_camera
+                walk_trans_node.setEnabled(true);
 
             } else {
 
-                // Inicjujemy grupę modeli dla walkCamera
-                await initializeWalk();
+                // Inicjujemy grupę modeli dla walk_camera
+                await initialize(tabName, -10);
             }
 
-            // Aktywuj kamerę walkCamera
+            // Aktywuj kamerę walk_camera
             if (scene.activeCamera instanceof BABYLON.ArcRotateCamera){
 
-                // Aktywujemy kamerę walkCamera
+                // Aktywujemy kamerę walk_camera
                 scene.activeCamera.detachControl(canvas);
-                scene.activeCamera = walkCamera;
-                walkCamera.attachControl(canvas, true);
+                scene.activeCamera = walk_camera;
+                walk_camera.attachControl(canvas, true);
             }
 
             // Włącz PhotoDome
             photodome.setEnabled(true);
 
             // Zmieniamy nazwę aktywnej zakładki
-            activeTab = 'walk';
+            active_tab = tabName;
 
             // Zmień stan checkboxów toggle1, toggle2, toggle3 w zależności od
             // stanu przycisków walk_buttons_states
@@ -491,80 +369,85 @@ const createScene = function (){
         canvas.focus();
     };
 
-    // Funkcja inicjująca rotację wszystkich modeli dla standardowej kamery
-    const initialize = async () => {
+    // Funkcja inicjująca modele STL
+    const initialize = async (cam_type, corr_pos) => {
 
         // Wczytujemy wszystkie modele po kolei
-        await Promise.all([loadFirstModel("standard", 0), loadSecondModel(
-            "standard", 25.5),loadThirdModel("standard", 25)]);
-        
-        // Tworzymy wspólny węzeł rodzicielski
-        transformNode = new BABYLON.TransformNode("groupParent");
-        
-        // Podłączamy wszystkie meshe do wspólnego rodzica
-        [...loadedMeshes, ...loadedMeshes1, ...loadedMeshes2].forEach(
-            mesh => {mesh.parent = transformNode;});
+        await Promise.all([
+            load_stl_model("Domek - Parter.stl", cam_type, -20 + corr_pos,
+            -90, -90, new BABYLON.Color3(1, 1, 1), new BABYLON.Color4(0, 0, 0,
+            1), 1),
+            load_stl_model("Domek - Strop.stl", cam_type, 5.5 + corr_pos, -72,
+            127, new BABYLON.Color3(1, 1, 1), new BABYLON.Color4(0, 0, 0, 1),
+            2),
+            load_stl_model("Domek - Dach.stl", cam_type, 5 + corr_pos, -306,
+            -86.5,new BABYLON.Color3(0, 0, 0), new BABYLON.Color4(1, 1, 1, 1),
+             3)]);
+                
+        // Sprawdzamy, która zakładka jest aktywna
+        if (cam_type === 'standard'){
 
-        // Ustawiamy widoczność na true
-        transformNode.getChildren().forEach(mesh => {
-
-            // Ustawiamy widoczność na true
-            mesh.isVisible = true;
-        });
-
-        // Rozpocznij automatyczną rotację
-        startAutoRotation();
-    };
-
-    // Funkcja inicjująca rotację wszystkich modeli dla walkCamera
-    const initializeWalk = async () => {
-
-        // Wczytujemy wszystkie modele po kolei
-        await Promise.all([loadFirstModel("walk", -10), loadSecondModel(
-            "walk", 15.5), loadThirdModel("walk", 15)]);
-
-        // Tworzymy wspólny węzeł rodzicielski
-        walkTransformNode = new BABYLON.TransformNode("walkGroupParent");
-
-        // Podłączamy wszystkie meshe do wspólnego rodzica
-        [...walkLoadedMeshes, ...walkLoadedMeshes1,
-            ...walkLoadedMeshes2].forEach(mesh => {
-                mesh.parent = walkTransformNode;});
-        
-        // Obróć obiekt o 30 stopni wokół osi Y
-        walkTransformNode.rotation.y = BABYLON.Tools.ToRadians(15);
-
-        // Ustawiamy widoczność na true
-        walkTransformNode.getChildren().forEach(mesh => {
+            // Tworzymy wspólny węzeł rodzicielski
+            trans_node = new BABYLON.TransformNode("groupParent");
+            
+            // Podłączamy wszystkie meshe do wspólnego rodzica
+            Object.values(lm_dict).forEach(meshes => {
+                meshes.forEach(mesh => {mesh.parent = trans_node;});});
 
             // Ustawiamy widoczność na true
-            mesh.isVisible = true;
-        });
+            trans_node.getChildren().forEach(mesh => {
+
+                // Ustawiamy widoczność na true
+                mesh.isVisible = true;
+            });
+
+            // Rozpocznij automatyczną rotację
+            start_auto_rotation();
+
+        }else{
+
+            // Tworzymy wspólny węzeł rodzicielski
+            walk_trans_node = new BABYLON.TransformNode("walkGroupParent");
+
+            // Podłączamy wszystkie meshe do wspólnego rodzica
+            Object.values(wlm_dict).forEach(meshes => {
+                meshes.forEach(mesh => {mesh.parent = walk_trans_node;});});
+            
+            // Obróć obiekt o 15 stopni wokół osi Y
+            walk_trans_node.rotation.y = BABYLON.Tools.ToRadians(15);
+
+            // Ustawiamy widoczność na true
+            walk_trans_node.getChildren().forEach(mesh => {
+
+                // Ustawiamy widoczność na true
+                mesh.isVisible = true;
+            });
+        }
     };
 
     // Dodajemy nasłuchiwanie na zakładki standard
     document.getElementById('tabStandard').addEventListener('click',
-        () => switchTab('standard'));
+        () => switch_tab('standard'));
 
     // Dodajemy nasłuchiwanie na zakładki walk
     document.getElementById('tabWalk').addEventListener('click',
-        () => switchTab('walk'));
+        () => switch_tab('walk'));
 
     // Inicjujemy rotacje
-    initialize();
+    initialize("standard", 0);
 
     // Updatujemy zoom kamery
-    updateCameraZoom();
+    update_camera_zoom();
 
-    // Blokujemy pozycję y kamery walkCamera
-    lockCameraYPosition(walkCamera, walkCamera.position.y);
+    // Blokujemy pozycję y kamery walk_camera
+    lock_cam_ypos(walk_camera, walk_camera.position.y);
 
     // Zwracamy gotową scenę
     return scene;
 };
 
 // Tworzmy scenę
-const scene = createScene();
+const scene = create_scene();
 
 // Renderujemy sce
 engine.runRenderLoop(() => scene.render());
@@ -576,135 +459,55 @@ window.addEventListener("resize", () => {
     engine.resize();  
 });
 
-// Inicjalizacja przycisku dla Parteru
-const toggleButton = document.getElementById('toggleButton');
+// Iteracja po tablicy przycisków
+toggle_butts.forEach((butt_id, c_ind) => {
 
-// Dodajemy nasłuchiwanie wciśniecia przycisku
-toggleButton.addEventListener('click', () => {
+    // Pobieramy przycisk
+    const button = document.getElementById(butt_id);
 
-    // Sprawdzamy, czy wczytano jakieś modele
-    if (loadedMeshes.length > 0  && activeTab === 'standard'){
+    // Dodajemy nasłuchiwanie wciśnięcia przycisku
+    button.addEventListener('click', () => {
 
-        // Zmieniamy widoczność wszystkich części modelu
-        const isVisible = !loadedMeshes[0].isVisible;
-        
-        // Zmień widoczność wszystkich części modelu
-        loadedMeshes.forEach(mesh => {
+        // Sprawdzamy, która zakładka jest aktywna
+        let c_dict;
 
-            // Zmień widoczność wszystkich części modelu
-            mesh.isVisible = isVisible;
-        });
-
-        // Zmieniamy stan przycisku
-        buttons_states[2] = !buttons_states[2];
-    }
-
-    // Sprawdzamy, czy wczytano jakieś modele
-    if (walkLoadedMeshes.length > 0 && activeTab === 'walk'){
-        
-        // Zmieniamy widoczność wszystkich części modelu
-        const isVisible2 = !walkLoadedMeshes[0].isVisible;
-        
-        // Zmień widoczność wszystkich części modelu
-        walkLoadedMeshes.forEach(mesh2 => {
-
-            // Zmień widoczność wszystkich części modelu
-            mesh2.isVisible = isVisible2;
-        });
-
-        // Zmieniamy stan przycisku
-        walk_buttons_states[2] = !walk_buttons_states[2];
-    }
-
-    // Przeniesienie fokusu na element canvas
-    canvas.focus();
+        // Sprawdzamy, która zakładka jest aktywna
+        if (active_tab === 'standard'){
     
-});
+            // Przypisujemy odpowiedni słownik
+            c_dict = lm_dict;
 
-// Inicjalizacja przycisku dla stropu
-const toggleButton1 = document.getElementById('toggleButton1');
+        } else {
 
-// Dodajemy nasłuchiwanie wciśniecia przycisku
-toggleButton1.addEventListener('click', () => {
+            // Przypisujemy odpowiedni słownik
+            c_dict = wlm_dict;
+        }
 
-    // Sprawdzamy, czy wczytano jakieś modele
-    if (loadedMeshes1.length > 0  && activeTab === 'standard'){
+        // Sprawdzamy, czy wczytano jakieś modele
+        if (c_dict[`meshes${c_ind + 1}`].length > 0){
 
-        // Zmieniamy widoczność wszystkich części modelu
-        const isVisible1 = !loadedMeshes1[0].isVisible;
-        
-        // Zmień widoczność wszystkich części modelu
-        loadedMeshes1.forEach(mesh1 => {
+            // Zmieniamy widoczność wszystkich części modelu
+            const isVisible = !c_dict[`meshes${c_ind + 1}`][0].isVisible;
 
             // Zmień widoczność wszystkich części modelu
-            mesh1.isVisible = isVisible1;
-        });
+            c_dict[`meshes${c_ind + 1}`].forEach(mesh => {
+                mesh.isVisible = isVisible;
+            });
 
-        // Zmieniamy stan przycisku
-        buttons_states[1] = !buttons_states[1];
-    }
+            // Zmieniamy stan przycisku
+            if (active_tab === 'standard'){
 
-    // Sprawdzamy, czy wczytano jakieś modele
-    if (walkLoadedMeshes1.length > 0 && activeTab === 'walk'){
+                // Zmieniamy stan przycisku
+                buttons_states[c_ind] = !buttons_states[c_ind];
 
-        // Zmieniamy widoczność wszystkich części modelu
-        const isVisible2 = !walkLoadedMeshes1[0].isVisible;
-        
-        // Zmień widoczność wszystkich części modelu
-        walkLoadedMeshes1.forEach(mesh2 => {
+            } else{
 
-            // Zmień widoczność wszystkich części modelu
-            mesh2.isVisible = isVisible2;
-        });
+                // Zmieniamy stan przycisku
+                walk_buttons_states[c_ind] = !walk_buttons_states[c_ind];
+            }
+        }
 
-        // Zmieniamy stan przycisku
-        walk_buttons_states[1] = !walk_buttons_states[1];
-    }
-
-    // Przeniesienie fokusu na element canvas
-    canvas.focus();
-});
-
-// Inicjalizacja przycisku dla dachu
-const toggleButton2 = document.getElementById('toggleButton2');
-
-// Dodajemy nasłuchiwanie wciśniecia przycisku
-toggleButton2.addEventListener('click', () => {
-
-    // Sprawdzamy, czy wczytano jakieś modele
-    if (loadedMeshes2.length > 0 && activeTab === 'standard'){
-
-        // Zmieniamy widoczność wszystkich części modelu
-        const isVisible2 = !loadedMeshes2[0].isVisible;
-        
-        // Zmień widoczność wszystkich części modelu
-        loadedMeshes2.forEach(mesh2 => {
-
-            // Zmień widoczność wszystkich części modelu
-            mesh2.isVisible = isVisible2;
-        });
-
-        // Zmieniamy stan przycisku
-        buttons_states[0] = !buttons_states[0];
-    }
-
-    // Sprawdzamy, czy wczytano jakieś modele
-    if (walkLoadedMeshes2.length > 0 && activeTab === 'walk'){
-
-        // Zmieniamy widoczność wszystkich części modelu
-        const isVisible2 = !walkLoadedMeshes2[0].isVisible;
-        
-        // Zmień widoczność wszystkich części modelu
-        walkLoadedMeshes2.forEach(mesh2 => {
-
-            // Zmień widoczność wszystkich części modelu
-            mesh2.isVisible = isVisible2;
-        });
-
-        // Zmieniamy stan przycisku
-        walk_buttons_states[0] = !walk_buttons_states[0];
-    }
-
-    // Przeniesienie fokusu na element canvas
-    canvas.focus();
+        // Przeniesienie fokusu na element canvas
+        canvas.focus();
+    });
 });

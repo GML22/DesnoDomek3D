@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Domek - wizualizacja 3D</title>
-    <link href="./imgs/GML_IC.jpg" rel="icon">
-    <link type="text/css" rel="stylesheet" href="./src/domek.css">
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-</head>
-<body>
-    <div class="tab-container">
-        <div id="tabStandard" class="tab active">Widok z góry</div>
-        <div id="tabWalk" class="tab">Wirtualny spacer</div>
-    </div>
-    <canvas id="renderCanvas" tabindex="0"></canvas>
-    <div class="button-container">
-        <input type="checkbox" id="toggle1" hidden>
-        <label for="toggle1" class="button" id="toggleButton2">Dach</label>
-        <input type="checkbox" id="toggle2" hidden>
-        <label for="toggle2" class="button" id="toggleButton1">Strop</label>
-        <input type="checkbox" id="toggle3" hidden>
-        <label for="toggle3" class="button" id="toggleButton">Parter</label>
-    </div>
-    <script src="./src/domek.js"></script>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Domek - wizualizacja 3D</title>
+        <link href="./imgs/GML_IC.jpg" rel="icon">
+        <link type="text/css" rel="stylesheet" href="./src/domek.css">
+        <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    </head>
+    <body>
+        <div class="tab-container">
+            <div id="tabStandard" class="tab active">Widok z góry</div>
+            <div id="tabWalk" class="tab">Wirtualny spacer</div>
+        </div>
+        <canvas id="render_canvas" tabindex="0"></canvas>
+        <div class="button-container">
+            <input type="checkbox" id="toggle1" hidden>
+            <label for="toggle1" class="button" id="toggle_butt3">Dach</label>
+            <input type="checkbox" id="toggle2" hidden>
+            <label for="toggle2" class="button" id="toggle_butt2">Strop</label>
+            <input type="checkbox" id="toggle3" hidden>
+            <label for="toggle3" class="button" id="toggle_butt1">Parter</label>
+        </div>
+        <script src="./src/domek.js"></script>
+    </body>
 </html>
