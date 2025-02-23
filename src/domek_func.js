@@ -79,8 +79,8 @@ function setup_walk_camera(_scene){
         walk_camera.speed = 0.5;
     }
 
-    // Ustawienie rotacji kamery walk_camera o 180 stopni wokół osi Y
-    walk_camera.rotation.y = -Math.PI / 1.6;
+    // Ustawienie rotacji kamery walk_camera wokół osi Y
+    walk_camera.rotation.y = -Math.PI / 1.4;
 
     // Ustawienie rotacji kamery walk_camera, aby patrzyła bardziej w górę
     walk_camera.rotation.x = -Math.PI / 20;
@@ -93,6 +93,9 @@ function setup_walk_camera(_scene){
 
     // Blokujemy pozycję y kamery walk_camera
     lock_cam_ypos(walk_camera, walk_camera.position.y);
+
+    // Ustawiamy pole widzenia kamery (np. 1.2 radianów, czyli około 69 stopni)
+    walk_camera.fov = 1.2;
 
     // Zwracamy kamerę walk
     return walk_camera;
@@ -411,9 +414,9 @@ async function switch_tab(_main_canvas, _scene, _main_camera, _walk_camera,
 };
 
 // Główna funkcja tworząca scenę
-export function create_main_scene(_main_canvas, _main_engine, _active_tab,
-    _buttons_states, _walk_buttons_states, _lm_dict, _wlm_dict, _is_rotating,
-    _trans_node, _walk_trans_node, _stop_rot){
+export function create_main_scene(_main_canvas, _main_engine, _link_360,
+    _active_tab, _buttons_states, _walk_buttons_states, _lm_dict, _wlm_dict,
+    _is_rotating, _trans_node, _walk_trans_node, _stop_rot){
 
     // Definiujemy obiekt sceny
     const main_scene = new BABYLON.Scene(_main_engine);
@@ -428,7 +431,7 @@ export function create_main_scene(_main_canvas, _main_engine, _active_tab,
     const walk_camera = setup_walk_camera(main_scene);
 
     // Ustawienie tła 360° za pomocą PhotoDome
-    const photo_dome = new BABYLON.PhotoDome("skyDome", "imgs/Desno.jpg",
+    const photo_dome = new BABYLON.PhotoDome("skyDome", _link_360,
         {resolution: 32,size: 5000}, main_scene);
 
     // Domyślnie wyłączamy photoDome

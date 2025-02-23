@@ -12,6 +12,9 @@ function main(){
     //----------------- 1. DEKLARACJA PODSTAWOWYCH ZMIENNYCH -----------------
     //------------------------------------------------------------------------
 
+    // Ustalamy sciezke do zdjecia 360
+    let link_360 = "imgs/Desno_luty_2025.jpg";
+
     // Definiujemy słownik, który będzie przechowywaźć wczytane meshe dla
     // kamery standardowej
     let lm_dict = {};
@@ -54,9 +57,9 @@ function main(){
     const main_engine = new BABYLON.Engine(main_canvas, true);
 
     // Tworzmy scenę
-    const fin_scene = create_main_scene(main_canvas, main_engine, active_tab,
-        buttons_states, walk_buttons_states, lm_dict, wlm_dict, is_rotating,
-        trans_node, walk_trans_node, stop_rot);
+    const fin_scene = create_main_scene(main_canvas, main_engine, link_360,
+        active_tab, buttons_states, walk_buttons_states, lm_dict, wlm_dict,
+        is_rotating, trans_node, walk_trans_node, stop_rot);
 
     // Renderujemy główną scenę
     main_engine.runRenderLoop(() => fin_scene.render());
