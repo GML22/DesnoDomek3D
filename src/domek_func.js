@@ -261,7 +261,7 @@ function load_stl_model(_scene, stl_name, camera_type, pos_y, pos_x, pos_z,
             meshes.forEach(mesh => {mesh.parent = _walk_trans_node.value;});});
         
         // Obróć obiekt o 15 stopni wokół osi Y
-        _walk_trans_node.value.rotation.y = BABYLON.Tools.ToRadians(15);
+        _walk_trans_node.value.rotation.y = BABYLON.Tools.ToRadians(-15);
 
         // Ustawiamy widoczność na true
         _walk_trans_node.value.getChildren().forEach(mesh => {
