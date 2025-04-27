@@ -432,7 +432,7 @@ export function create_main_scene(_main_canvas, _main_engine, _link_360,
 
     // Ustawienie tła 360° za pomocą PhotoDome
     const photo_dome = new BABYLON.PhotoDome("skyDome", _link_360,
-        {resolution: 32,size: 5000}, main_scene);
+        {resolution: 32, size: 5000}, main_scene);
 
     // Domyślnie wyłączamy photoDome
     photo_dome.setEnabled(false);
