@@ -13,7 +13,7 @@ function main(){
     //------------------------------------------------------------------------
 
     // Ustalamy sciezke do zdjecia 360
-    let link_360 = "imgs/Desno_maj_2025.jpg";
+    let link_360 = "360img.jpg";
 
     // Definiujemy słownik, który będzie przechowywaźć wczytane meshe dla
     // kamery standardowej
