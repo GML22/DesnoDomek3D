@@ -1,6 +1,8 @@
+*[Projekt został zakończony w lipcu 2025 roku]*
+
 Model 3D domu typu nowoczesna stodoła opracowany w oprogramowaniu Bambu Studio (v. 2.1.1.52), a wydrukowany na drukarce Bambu Lab A1 mini przy pomocy filamentu firmy Devil Design PLA 1,75mm.
 
-![](/imgs/print_vis/bambu_studio_vis.png)
+![](/imgs/bambu_studio_vis.png)
 
 ![](/imgs/print_vis/IMG_8375.jpeg)
 
@@ -16,6 +18,10 @@ Druk został przeprowadzony przy domyślnych ustawieniach drukarki z podporami t
 
 ![](/imgs/print_vis/IMG_8384.jpeg)
 
-Dla modelu stworzona została wizualizacja w języku JavaScript przy pomocy biblioteki Babylon.js umożliwiająca szczegółową analizę modelu oraz wirtualny spacer 3D.
+Dla modelu stworzona została wizualizacja w języku JavaScript przy pomocy biblioteki Babylon.js (https://gml22.github.io/DesnoDomek3D) umożliwiająca szczegółową analizę modelu oraz wirtualny spacer 3D.
 
-Powyższy model został opracowany na podstawie projektu architektonicznego przygotowanego przez mgr inż. arch. Dariusza Dziwaka ([awo studio dariusz dziwak](https://www.instagram.com/awo_studio_)).
+![](/imgs/domek3d.gif)
+
+![](/imgs/domek3d_spacer.png)
+
+Powyższy model został opracowany na podstawie projektu architektonicznego przygotowanego przez mgr. inż. arch. Dariusza Dziwaka ([awo studio dariusz dziwak](https://www.instagram.com/awo_studio_)).
