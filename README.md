@@ -1,3 +1,5 @@
+* *[Projekt został zakończony w lipcu 2025 roku]
+
 Model 3D domu typu nowoczesna stodoła opracowany w oprogramowaniu Bambu Studio (v. 2.1.1.52), a wydrukowany na drukarce Bambu Lab A1 mini przy pomocy filamentu firmy Devil Design PLA 1,75mm.
 
 ![](/imgs/bambu_studio_vis.png)
