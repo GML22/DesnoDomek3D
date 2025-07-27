@@ -18,7 +18,7 @@ Druk został przeprowadzony przy domyślnych ustawieniach drukarki z podporami t
 
 ![](/imgs/print_vis/IMG_8384.jpeg)
 
-Dla modelu stworzona została wizualizacja w języku JavaScript przy pomocy biblioteki Babylon.js umożliwiająca szczegółową analizę modelu oraz wirtualny spacer 3D.
+Dla modelu stworzona została wizualizacja w języku JavaScript przy pomocy biblioteki Babylon.js (https://gml22.github.io/Domek3D) umożliwiająca szczegółową analizę modelu oraz wirtualny spacer 3D.
 
 ![](/imgs/domek3d.gif)
 
