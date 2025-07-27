@@ -60,7 +60,7 @@ function setup_walk_camera(_scene){
     const walk_camera = new BABYLON.UniversalCamera("walkCamera",
         new BABYLON.Vector3(200, -13, 150), _scene);
     
-    // Ustawienia czułości kamery na urządzeniu mobilnym (Zmniejsz wartość,
+    // Ustawienia czułości kamery na urządzeniu mobilnym (zmniejsz wartość,
     // aby zwiększyć czułość)
     walk_camera.inputs.attached.touch.touchAngularSensibility = 10000;
     
@@ -94,7 +94,8 @@ function setup_walk_camera(_scene){
     // Blokujemy pozycję y kamery walk_camera
     lock_cam_ypos(walk_camera, walk_camera.position.y);
 
-    // Ustawiamy pole widzenia kamery (np. 1.2 radianów, czyli około 69 stopni)
+    // Ustawiamy pole widzenia kamery (np. 1.2 radianów, czyli około 69
+    // stopni)
     walk_camera.fov = 1.2;
 
     // Zwracamy kamerę walk
