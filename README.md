@@ -24,4 +24,4 @@ Dla modelu stworzona została wizualizacja w języku JavaScript przy pomocy bibl
 
 ![](/imgs/domek3d_spacer.png)
 
-Powyższy model został opracowany na podstawie projektu architektonicznego przygotowanego przez mgr inż. arch. Dariusza Dziwaka ([awo studio dariusz dziwak](https://www.instagram.com/awo_studio_)).
+Powyższy model został opracowany na podstawie projektu architektonicznego przygotowanego przez mgr. inż. arch. Dariusza Dziwaka ([awo studio dariusz dziwak](https://www.instagram.com/awo_studio_)).
