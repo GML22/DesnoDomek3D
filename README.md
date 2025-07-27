@@ -16,4 +16,6 @@ Druk został przeprowadzony przy domyślnych ustawieniach drukarki z podporami t
 
 ![](/imgs/print_vis/IMG_8384.jpeg)
 
+Dla modelu stworzona została wizualizacja w języku JavaScript przy pomocy biblioteki Babylon.js umożliwiająca szczegółową analizę modelu oraz wirtualny spacer 3D.
+
 Powyższy model został opracowany na podstawie projektu architektonicznego przygotowanego przez mgr inż. arch. Dariusza Dziwaka ([awo studio dariusz dziwak](https://www.instagram.com/awo_studio_)).
